@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+ 
+</head>
+<body>
+    
+    <div class="main_div">
+        <h1><span>How to Win Friends</span>And influence people</h1>
+        <div class="music_container">
+            <h2 id="title">Disc-1</h2>
+            <h3 id="artist">Dale Carnegie</h3>
+            <div class="image_container">
+                <img src="https://docs.google.com/uc?export=download&id=15GTVqilfdUrHKsPFuXhxfKYNFl1OVmn_" alt="">
+            </div>
+           
+            <audio src="https://docs.google.com/uc?export=download&id=1cADqFlEy6A7g7wXAGGxitEUNyOHR-Rgz" id="audio"></audio>
+  
+            <!------Progress Bar------->
+            <div class="progressbar_container" id="progress_container">
+                <div class="progress_duration_meter">
+                    <div id="current_time">0:00</div>
+                    <div id="duration">0:00</div>
+                </div>
+                <div class="progress_div" id="progress_div">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+
+            <!------ Controls ------->
+            <div class="music_controls">           
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play main_button" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>           
+            </div>
+
+            
+
+
+        </div>
+    </div>    
+</body>
+
+<!--Javascript work starts-->
+<script>
+     
+     const img = document.querySelector('img');
+    const music = document.getElementById("audio");
+    const play = document.getElementById('play');
+    const artist = document.getElementById('artist');
+    const title = document.getElementById('title');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let progress = document.getElementById('progress');
+    const tot_duration = document.getElementById("duration");
+    let current_time = document.getElementById("current_time");
+    const progress_div = document.getElementById("progress_div");
+        
+
+    const songs = [
+        {
+            name : "https://docs.google.com/uc?export=download&id=1fWs47kpiloomH4Z-GIGRv6ABTg8MJgQD",
+            title : "Disc-2",
+            artist : "Dale Carnegie",
+            image:"book",
+        },
+
+        {
+            name : "https://docs.google.com/uc?export=download&id=1kHaQzzK1Bmx0lqOA2K4DN6yFCDPYp8U-",
+            title : "Disc-3",
+            artist : "Dale Carnegie",     
+            image:"book",
+        },
+
+        {
+            name : "https://docs.google.com/uc?export=download&id=1_4cH02NOse4buJxJvfJGN7lQwooPwQxS",
+            title : 'Disc-4',
+            artist : "Dale Carnegie",
+            image:"book",
+        },
+
+        {
+            name : "https://docs.google.com/uc?export=download&id=12yqXU-HaKOmpgFn7HMR6TDA6-rkRxi5l",
+            title : "Disc-5",
+            artist : "Dale Carnegie",
+            image:"book",
+        },
+
+        {
+            name :"https://docs.google.com/uc?export=download&id=1w3r9XBXlYbntAd5COjCc9y4nRpUQrvRV",
+            title : "Disc-6",
+            artist: "Dale Carnegie",
+            image:"book",
+
+       },
+
+        {
+                    name :"https://docs.google.com/uc?export=download&id=1eYV72-CmR4VVKOfDIHsaauyjyG85XBFH",
+                    title : "Disc-7",
+                    artist: "Dale Carnegie",
+                    image:"book",
+        },
+
+            {
+                name :"https://docs.google.com/uc?export=download&id=1l2-W9Yul0lAeGYGbt74AWl0201P8RD8s",
+                title : "Disc-8",
+                artist: "Dale Carnegie",
+                image:"book",
+            },
+        
+            {
+                name :"https://docs.google.com/uc?export=download&id=1cADqFlEy6A7g7wXAGGxitEUNyOHR-Rgz",
+                title : "Disc-1",
+                artist: "Dale Carnegie",
+                image:"book",
+            }
+    ];
+    
+    let isPlaying = false;    //boolean value to know song is playing or not
+
+    //for play function
+    const playMusic = () => {
+        isPlaying = true;   //after clicking on play button , isplaying value will become TRUE
+        music.play();    //play function of html
+        play.classList.replace('fa-play','fa-pause'); //replacing icon
+        img.classList.add('anime');                   // add animation 
+    };
+
+     //for pause function
+     const pauseMusic = () => {
+        isPlaying = false;  //after clicking on pause button , isplaying value will become TRUE
+        music.pause();      
+        play.classList.replace('fa-pause','fa-play');  // agian replace icons
+        img.classList.remove('anime');         // remove animation          
+    };
+
+    play.addEventListener('click',() => {
+        if(isPlaying)  //If value of isPlaying is TRUE then call pauseMusic function.
+        {   
+            pauseMusic();
+        }
+        else          // else call playMusic function
+        {   playMusic();}
+
+         // isPlaying  ? pauseMusic() : playMusic();
+         // we can use ternary operator instead of if else.
+    });
+
+   
+    //changing  the Music data
+
+    ChangeSong = (songs) =>
+    {
+        title.textContent = songs.title;
+        artist.textContent = songs.artist;
+        music.src = `${songs.name}`;
+        img.src = "book.jpg";
+    };
+
+    songsIndex = 0;
+
+
+    const nextSong = () =>
+    {
+        songsIndex = (songsIndex+1) % songs.length;  // eg. 2 = 3 % 5 ==> after last song first song will again play.
+        ChangeSong(songs[songsIndex]); 
+        playMusic();  // so next song will be play automatically
+    }
+  
+    const prevSong = () =>
+    {
+        songsIndex = (songsIndex - 1 + songs.length) % songs.length;
+        ChangeSong(songs[songsIndex]);
+        playMusic();
+    }
+    
+    //Progress bar javascript work
+
+    music.addEventListener('timeupdate',(event) =>{
+        const {currentTime , duration} = event.srcElement; //using object destructing
+        //console.log(currentTime);
+        //console.log(duration);
+
+        let progress_time = (currentTime/duration) * 100;
+        progress.style.width = `${progress_time}%`;   // width of .progress changing dynamically
+        
+        //Music duration update
+
+        let min_duration = Math.floor(duration / 60);
+        let sec_duration = Math.floor(duration % 60);
+
+        
+        total_duration = `${min_duration}:${sec_duration}`;
+        if(duration)
+        {
+        tot_duration.textContent = `${total_duration}`;
+        }
+
+        //Music current_duration update
+
+        let min_current = Math.floor(currentTime / 60);
+        let sec_current = Math.floor(currentTime % 60);
+
+        
+        if (sec_current < 10) 
+        {
+            sec_current = `0${sec_current}`;
+        }
+        
+        total_current = `${min_current}:${sec_current}`;
+      
+        current_time.textContent = `${total_current}`;
+        
+    });
+
+    progress_div.addEventListener('click',(event) =>{
+        console.log(event);
+
+    });
+    // to play next song when when current song ends
+
+    music.addEventListener('ended',nextSong);  
+
+
+    next.addEventListener('click',nextSong);
+    prev.addEventListener('click',prevSong);
+     
+</script>
+
+</html>
